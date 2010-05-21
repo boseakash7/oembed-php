@@ -206,7 +206,7 @@ class OEmbed {
 			$this->autoEmbedArgs = array();
 		}
 	
-		return preg_replace_callback( '|^[ \t]*(https?://[^\s"]+)[ \t]*$|im', array( &$this, 'autoEmbedCallback'), $content );
+		return preg_replace_callback( '|^[ \t]*(https?://[^\s"]+)\s*$|im', array( &$this, 'autoEmbedCallback'), $content );
 	}
 	
 	function autoEmbedCallback($match){		
