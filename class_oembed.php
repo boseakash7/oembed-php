@@ -82,6 +82,8 @@ class OEmbed {
 	}
 	
 	function getHtml($url, $args = ""){
+	
+		$url = trim($url);
 		
 		foreach ($this->providers as $regex => $provider_url) {
 			if(preg_match($regex,$url)){
