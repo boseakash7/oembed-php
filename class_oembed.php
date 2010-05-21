@@ -35,7 +35,7 @@ class OEmbed {
 	
 		// First query the JSON ressource. If this fails, try to query the xml one.
 		
-		$result_json = $this->queryProvicer($provider_url."?".$query_string."&".$query_string_format["json"]);
+		$result_json = $this->queryProvider($provider_url."?".$query_string."&".$query_string_format["json"]);
 		
 		if($result_json["success"]){
 		
@@ -53,7 +53,7 @@ class OEmbed {
 			
 		}elseif(function_exists('simplexml_load_string')){
 		
-			$result_xml = $this->queryProvicer($provider_url."?".$query_string."&".$query_string_format["xml"]);
+			$result_xml = $this->queryProvider($provider_url."?".$query_string."&".$query_string_format["xml"]);
 		
 			if($result_xml["success"]){
 				
@@ -158,7 +158,7 @@ class OEmbed {
 		return $result;
 	}
 	
-	function queryProvicer($url){
+	function queryProvider($url){
 		
 		$result = array();
 	
@@ -197,5 +197,20 @@ class OEmbed {
 	function escapeHTML($html){
 		return htmlentities($html, ENT_COMPAT, "ISO-8859-1",false);
 	}
+	
+	function autoEmbed($content, $args = ""){
+		
+		if(is_array($args)){
+			$this->autoEmbedArgs = $args;
+		}else{
+			$this->autoEmbedArgs = array();
+		}
+	
+		return preg_replace_callback( '|^[ \t]*(https?://[^\s"]+)[ \t]*$|im', array( &$this, 'autoEmbedCallback'), $content );
+	}
+	
+	function autoEmbedCallback($match){		
+		return $this->getHTML($match[0], $this->autoEmbedArgs);
+	}	
 }
 ?>
